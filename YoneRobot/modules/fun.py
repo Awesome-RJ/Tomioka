@@ -1,6 +1,7 @@
-import html
+mport html
 import random
 import time
+import requests
 
 import YoneRobot.modules.fun_strings as fun_strings
 from YoneRobot import dispatcher
@@ -217,8 +218,20 @@ def decide(update: Update, context: CallbackContext):
         else update.effective_message.reply_text
     )
     reply_text(random.choice(fun_strings.DECIDE))
+    
 
-
+@run_async
+def meme(update: Update, context: CallbackContext):
+    msg = update.effective_message
+    meme = requests.get("https://meme-api.herokuapp.com/gimme/Animemes/").json()
+    image = meme.get("url")
+    caption = meme.get("title")
+    if not image:
+        msg.reply_text("No URL was received from the API!")
+        return
+    msg.reply_photo(
+                photo=image, caption=caption)
+    
 @run_async
 def eightball(update: Update, context: CallbackContext):
     reply_text = (
@@ -339,8 +352,10 @@ __help__ = """
  ❍ /sanitize*:* always use this before /pat or any contact
  ❍ /pat*:* pats a user, or get patted
  ❍ /8ball*:* predicts using 8ball method 
+ ❍ /meme - anime memes from r/animememes
 """
 
+MEME_HANDLER = DisableAbleCommandHandler("meme", meme)
 SANITIZE_HANDLER = DisableAbleCommandHandler("sanitize", sanitize)
 RUNS_HANDLER = DisableAbleCommandHandler("runs", runs)
 SLAP_HANDLER = DisableAbleCommandHandler("slap", slap)
@@ -370,6 +385,7 @@ dispatcher.add_handler(RLG_HANDLER)
 dispatcher.add_handler(DECIDE_HANDLER)
 dispatcher.add_handler(EIGHTBALL_HANDLER)
 dispatcher.add_handler(TABLE_HANDLER)
+dispatcher.add_handler(MEME_HANDLER)
 
 __mod_name__ = "Memes"
 __command_list__ = [
@@ -403,4 +419,5 @@ __handlers__ = [
     SHOUT_HANDLER,
     WEEBIFY_HANDLER,
     EIGHTBALL_HANDLER,
+    MEME_HANDLER
 ]
