@@ -292,4 +292,4 @@ LIST_URLS_HANDLER = CommandHandler("listrss", list_urls)
 dispatcher.add_handler(SHOW_URL_HANDLER)
 dispatcher.add_handler(ADD_URL_HANDLER)
 dispatcher.add_handler(REMOVE_URL_HANDLER)
-dispatcher.add_handler(LIST_URLS_HANDLER)aRobot.modules.sql import rss_sql as sql
+dispatcher.add_handler(LIST_URLS_HANDLER)
