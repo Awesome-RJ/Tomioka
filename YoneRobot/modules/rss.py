@@ -1,12 +1,5 @@
 import html
 import re
-
-from feedparser import parse
-from YoneRobot import dispatcher, updater
-from YoneRobot.modules.helper_funcs.chat_status import user_admin
-from YoneRobot import html
-import re
-
 from feedparser import parse
 from YoneRobot import dispatcher, updater
 from YoneRobot.modules.helper_funcs.chat_status import user_admin
