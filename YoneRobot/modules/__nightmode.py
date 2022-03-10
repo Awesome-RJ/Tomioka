@@ -57,10 +57,11 @@ openhehe = ChatBannedRights(
 
 @register(pattern="^/addnt")
 async def close_ws(event):
-    if event.is_group:
-     if not (await is_register_admin(event.input_chat, event.message.sender_id)):
-       await event.reply("⚠️Hai.. You are not admin..You can't use this command..")
-       return
+    if event.is_group and not (
+        await is_register_admin(event.input_chat, event.message.sender_id)
+    ):
+        await event.reply("⚠️Hai.. You are not admin..You can't use this command..")
+        return
 
     if not event.is_group:
         await event.reply("You Can Only Enable Night Mode in Groups.")
@@ -73,10 +74,11 @@ async def close_ws(event):
 
 @register(pattern="^/rmnt")
 async def disable_ws(event):
-    if event.is_group:
-     if not (await is_register_admin(event.input_chat, event.message.sender_id)):
-       await event.reply("⚠️Hai.. You are not admin..You can't use this command..")
-       return
+    if event.is_group and not (
+        await is_register_admin(event.input_chat, event.message.sender_id)
+    ):
+        await event.reply("⚠️Hai.. You are not admin..You can't use this command..")
+        return
 
     if not event.is_group:
         await event.reply("You Can Only Disable Night Mode in Groups.")

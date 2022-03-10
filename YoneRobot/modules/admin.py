@@ -436,7 +436,7 @@ def pin(update, context):
     chat = update.effective_chat
     message = update.effective_message
 
-    is_group = chat.type != "private" and chat.type != "channel"
+    is_group = chat.type not in ["private", "channel"]
 
     prev_message = update.effective_message.reply_to_message
 
@@ -446,11 +446,7 @@ def pin(update, context):
 
     is_silent = True
     if len(args) >= 1:
-        is_silent = not (
-            args[0].lower() == "notify"
-            or args[0].lower() == "loud"
-            or args[0].lower() == "violent"
-        )
+        is_silent = not args[0].lower() in ["notify", "loud", "violent"]
 
     if prev_message and is_group:
         try:
@@ -458,9 +454,7 @@ def pin(update, context):
                 chat.id, prev_message.message_id, disable_notification=is_silent
             )
         except BadRequest as excp:
-            if excp.message == "Chat_not_modified":
-                pass
-            else:
+            if excp.message != "Chat_not_modified":
                 raise
         return (
             "<b>{}:</b>"
@@ -469,8 +463,6 @@ def pin(update, context):
                 html.escape(chat.title), mention_html(user.id, user.first_name)
             )
         )
-
-        return log_message
 
 
 @run_async
@@ -565,9 +557,13 @@ def adminlist(update, context):
         else:
             name = "{}".format(
                 mention_html(
-                    user.id, html.escape(user.first_name + " " + (user.last_name or ""))
+                    user.id,
+                    html.escape(
+                        f'{user.first_name} ' + ((user.last_name or ""))
+                    ),
                 )
             )
+
 
         if user.is_bot:
             bot_admin_list.append(name)
@@ -598,17 +594,19 @@ def adminlist(update, context):
         else:
             name = "{}".format(
                 mention_html(
-                    user.id, html.escape(user.first_name + " " + (user.last_name or ""))
+                    user.id,
+                    html.escape(
+                        f'{user.first_name} ' + ((user.last_name or ""))
+                    ),
                 )
             )
-        # if user.username:
-        #    name = escape_markdown("@" + user.username)
+
         if status == "administrator":
             if custom_title:
                 try:
                     custom_admin_list[custom_title].append(name)
                 except KeyError:
-                    custom_admin_list.update({custom_title: [name]})
+                    custom_admin_list[custom_title] = [name]
             else:
                 normal_admin_list.append(name)
 
